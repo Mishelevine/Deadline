@@ -24,6 +24,21 @@ namespace CHARACTERS
                 DestroyImmediate(gameObject);
         }
 
+        public CharacterConfigData GetCharacterConfig(string characterName)
+        {
+            return config.GetConfig(characterName);
+        }
+
+        public Character GetCharacter(string characterName, bool createIfDoesNotExist = false)
+        {
+            if (characters.ContainsKey(characterName.ToLower()))
+                return characters[characterName.ToLower()];
+            else if (createIfDoesNotExist)
+                return CreateCharacter(characterName);
+
+            return null;
+        }
+
         public Character CreateCharacter(string characterName)
         {
             if (characters.ContainsKey(characterName.ToLower()))
@@ -57,10 +72,10 @@ namespace CHARACTERS
             CharacterConfigData config = info.config;
 
             if (config.characterType == Character.CharacterType.Text)
-                return new Character_Text(info.name);
+                return new Character_Text(info.name, config);
 
             if (config.characterType == Character.CharacterType.Sprite || config.characterType == Character.CharacterType.SpriteSheet)
-                return new Character_Sprite(info.name);
+                return new Character_Sprite(info.name, config);
 
             return null;
         }
