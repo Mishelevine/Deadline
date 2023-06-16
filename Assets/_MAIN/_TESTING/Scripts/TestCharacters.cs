@@ -9,6 +9,8 @@ public class TestCharacters : MonoBehaviour
 {
     public TMP_FontAsset tempFont;
 
+    private Character CreateCharacter(string name) => CharacterManager.instance.CreateCharacter(name);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,39 +23,56 @@ public class TestCharacters : MonoBehaviour
 
     IEnumerator Test()
     {
-        Character Mifim = CharacterManager.instance.CreateCharacter("Mifim");
-        Character Me = CharacterManager.instance.CreateCharacter("Me");
-        Character Ben = CharacterManager.instance.CreateCharacter("Benjamin");
+        Character_Sprite Mifim = CreateCharacter("Mifim") as Character_Sprite;
 
-        List<string> lines = new List<string>()
-        {
-            "Hi!",
-            "This is a line",
-            "And another",
-            "And{wa 2} a last one"
-        };
-        yield return Mifim.Say(lines);
+        yield return new WaitForSeconds(1);
 
-        Mifim.SetNameColor(Color.red);
-        Mifim.SetDialogueColor(Color.red);
+        Mifim.Animate("Hop");
 
-        yield return Mifim.Say(lines);
+        yield return new WaitForSeconds(1);
 
-        Mifim.ResetConfigurationData();
+        Mifim.Animate("Shiver", true);
 
-        yield return Mifim.Say(lines);
+        yield return new WaitForSeconds(1);
 
-        lines = new List<string>()
-        {
-            "I am {c}Hui",
-            "Hello"
-        };
+        Mifim.Animate("Shiver", false);
 
-        yield return Me.Say(lines);
+        //yield return new WaitForSeconds(2f);
 
-        yield return Ben.Say("Just a simple line.{a} It is a simple line");
+        //yield return Mifim.UnHighlight();
 
-        Debug.Log("Finished");
+        //yield return new WaitForSeconds(1);
+
+        //yield return Mifim.TransitionColor(Color.red);
+
+        //yield return new WaitForSeconds(1);
+
+        //yield return Mifim.Highlight();
+
+        //yield return Mifim.TransitionColor(Color.white);
+
+        //Character Hui = CreateCharacter("Hui as Mifim");
+
+        //Mifim.SetPosition(Vector2.zero);
+        //Hui.SetPosition(new(0.5f,0f));
+
+        //Mifim.Show();
+        //Hui.Show();
+
+        //yield return new WaitForSeconds(2f);
+
+        //Sprite MifimFun = Mifim.GetSprite("fun");
+
+        //Mifim.TransitionSprite(MifimFun);
+
+        //yield return Mifim.MoveToPosition(new(1, 0), smooth: true);
+        //Mifim.MoveToPosition(new(0, 0), smooth: true);
+
+        //Sprite MifimSad = Mifim.GetSprite("sad");
+
+        //Mifim.TransitionSprite(MifimSad);
+
+        yield return null;
     }
 
     // Update is called once per frame
