@@ -19,20 +19,6 @@ namespace TESTING
         {
             List<string> lines = FileManager.ReadTextAsset(fileToRead);
 
-            //foreach (string line in lines)
-            //{
-            //    if(string.IsNullOrEmpty(line)) 
-            //        continue;
-
-            //    DIALOGUE_LINE dl = DialogueParser.Parse(line);
-
-            //    for (int i = 0; i < dl.commandsData.commands.Count; i++)
-            //    {
-            //        DL_COMMAND_DATA.Command cmd = dl.commandsData.commands[i];
-            //        Debug.Log($"Command [{i}] '{cmd.name}' has args [{string.Join(",", cmd.arguments)}]");
-            //    }
-            //}
-
             DialogueSystem.instance.Say(lines);
         }
     }

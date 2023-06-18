@@ -62,6 +62,7 @@ namespace DIALOGUE
                 if(line.hasDialogue)
                 {
                     yield return WaitForUserInput();
+
                     CommandManager.instance.StopAllProcesses();
                 }
             }
@@ -181,8 +182,13 @@ namespace DIALOGUE
 
         IEnumerator WaitForUserInput()
         {
+            dialogueSystem.prompt.Show();
+
             while(!userPrompt)
                 yield return null;
+
+            dialogueSystem.prompt.Hide();
+
             userPrompt = false;
         }
     }

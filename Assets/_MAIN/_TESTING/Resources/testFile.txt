@@ -1,6 +1,23 @@
+SetLayerMedia(-panel background -media monkey -speed 0.7 -blend radialClock)
+
+CreateCharacter(Вячеслав Владимирович -enable true -i true)
+
+Вячеслав Владимирович "Welcome to the HSE!"
+
+ClearLayerMedia(-panel background -blend radialClock)
+
+Вячеслав Владимирович "Фон должен быть пустой!"
+
+SetBackground()
+
+SetLayerImage()
+
+
 CreateCharacter(Михаил Александрович -enable true), CreateCharacter(Миша Ефимов -e true)
 
 [wait]MoveCharacter(Михаил Александрович -x 0 -speed 0.1 -s false -i false)
+
+Михаил Александрович "Я устал... {wa 1} ПИЗДЕЦ"
 
 [wait]Михаил Александрович.Hide(), [wait]Михаил Александрович.Show()
 
@@ -18,4 +35,4 @@ wait(3)
 
 wait(3)
 
-Михаил Александрович.SetColor(-c red)
+Михаил Александрович.SetColor(-c cyan)

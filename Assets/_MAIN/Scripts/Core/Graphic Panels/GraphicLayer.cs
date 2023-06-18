@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class GraphicLayer
 {
@@ -8,29 +9,89 @@ public class GraphicLayer
     public int layerDepth = 0;
     public Transform panel;
 
-    public void SetTexture(string filePath, float transitionSpeed = 1f, Texture blendingTexture = null)
+    public GraphicObject currentGraphic = null;
+    private List<GraphicObject> oldGrathics = new List<GraphicObject>();
+
+    public Coroutine SetTexture(string filePath, float transitionSpeed = 1f, Texture blendingTexture = null, bool immediate = false)
     {
         Texture tex = Resources.Load<Texture>(filePath);
 
-        if(tex == null)
+        if (tex == null)
         {
             Debug.LogError($"Could not load graphic texture from path '{filePath}'");
-            return;
+            return null;
         }
 
-        SetTexture(tex, transitionSpeed, blendingTexture);
+        return SetTexture(tex, transitionSpeed, blendingTexture, immediate: immediate);
     }
 
-    public void SetTexture(Texture tex, float transitionSpeed = 1f, Texture blendingTexture = null, string filePath = "")
+    public Coroutine SetTexture(Texture tex, float transitionSpeed = 1f, Texture blendingTexture = null, string filePath = "", bool immediate = false)
     {
-        CreateGraphic(tex, transitionSpeed, filePath, blendingTexture);
+        return CreateGraphic(tex, transitionSpeed, filePath, blendingTexture: blendingTexture, immediate: immediate);
     }
 
-    private void CreateGraphic<T>(T graphicData, float transitionSpeed, string filePath, bool useAudioForVideo = true, Texture blendingTexture = null)
+    public Coroutine SetVideo(string filePath, float transitionSpeed = 1f, bool useAudio = true, Texture blendingTexture = null, bool immediate = false)
     {
-        GraphicObject newGraphic;
+        VideoClip clip = Resources.Load<VideoClip>(filePath);
+
+        if (clip == null)
+        {
+            Debug.LogError($"Could not load graphic video from path '{filePath}'");
+            return null;
+        }
+
+        return SetVideo(clip, transitionSpeed, useAudio, blendingTexture, immediate: immediate);
+    }
+
+    public Coroutine SetVideo(VideoClip clip, float transitionSpeed = 1f, bool useAudio = true, Texture blendingTexture = null, string filePath = "", bool immediate = false)
+    {
+        return CreateGraphic(clip, transitionSpeed, filePath, useAudio, blendingTexture: blendingTexture, immediate);
+    }
+
+    private Coroutine CreateGraphic<T>(T graphicData, float transitionSpeed, string filePath, bool useAudioForVideo = true, Texture blendingTexture = null, bool immediate = false)
+    {
+        GraphicObject newGraphic = null;
 
         if (graphicData is Texture)
-            newGraphic = new GraphicObject(this, filePath, graphicData as Texture);
+            newGraphic = new GraphicObject(this, filePath, graphicData as Texture, immediate);
+        else if (graphicData is VideoClip)
+            newGraphic = new GraphicObject(this, filePath, graphicData as VideoClip, useAudioForVideo, immediate);
+
+        if (currentGraphic != null && !oldGrathics.Contains(currentGraphic))
+            oldGrathics.Add(currentGraphic);
+
+        currentGraphic = newGraphic;
+        if (!immediate)
+            return currentGraphic.FadeIn(transitionSpeed, blendingTexture);
+
+        DestroyOldGraphics();
+        return null;
+    }
+
+    public void DestroyOldGraphics()
+    {
+        foreach (var g in oldGrathics)
+            Object.Destroy(g.renderer.gameObject);
+
+        oldGrathics.Clear();
+    }
+
+    public void Clear(float transitionSpeed = 1, Texture blendTexture = null, bool immediate = false)
+    {
+        if(currentGraphic != null)
+        {
+            if(!immediate)
+                currentGraphic.FadeOut(transitionSpeed, blendTexture);
+            else
+                currentGraphic.Destroy();
+        }
+
+        foreach (var g in oldGrathics)
+        {
+            if (!immediate)
+                g.FadeOut(transitionSpeed, blendTexture);
+            else
+                g.Destroy();
+        }
     }
 }
