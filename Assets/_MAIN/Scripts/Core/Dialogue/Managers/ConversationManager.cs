@@ -1,3 +1,4 @@
+using CHARACTERS;
 using COMMANDS;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,18 +60,46 @@ namespace DIALOGUE
                     yield return Line_RunCommands(line);
 
                 if(line.hasDialogue)
+                {
                     yield return WaitForUserInput();
+                    CommandManager.instance.StopAllProcesses();
+                }
             }
         }
 
         IEnumerator Line_RunDialogue(DIALOGUE_LINE line)
         {
             if (line.hasSpeaker)
-                dialogueSystem.ShowSpeakerName(line.speakerData.displayName);
-
-            //architect.Build(line.dialogueData);
+            {
+                HandleSpeakerLogic(line.speakerData);
+            }
 
             yield return BuildLineSegments(line.dialogueData);
+        }
+
+        private void HandleSpeakerLogic(DL_SPEAKER_DATA speakerData)
+        {
+            bool characterMustBeCreated = (speakerData.makeCharacterEnter || speakerData.isCastingPosition || speakerData.isCastingExpressions);
+
+            Character character = CharacterManager.instance.GetCharacter(speakerData.name, createIfDoesNotExist: characterMustBeCreated);
+
+            if (speakerData.makeCharacterEnter && (!character.isVisible && !character.isRevealing))
+                character.Show();
+
+            dialogueSystem.ShowSpeakerName(speakerData.displayName);
+
+            DialogueSystem.instance.ApplySpeakerDataToDialogueContainer(speakerData.name);
+
+            if (speakerData.isCastingPosition)
+                character.MoveToPosition(speakerData.castPosition);
+
+            if (speakerData.isCastingExpressions)
+            {
+                foreach(var ce in speakerData.CastExpressions)
+                {
+                    character.OnRecieveCastingExpression(ce);
+                }
+            }
         }
 
         IEnumerator Line_RunCommands(DIALOGUE_LINE line)
@@ -79,8 +108,19 @@ namespace DIALOGUE
 
             foreach(DL_COMMAND_DATA.Command command in commands)
             {
-                if (command.waitForCompletion)
-                    yield return CommandManager.instance.Execute(command.name, command.arguments);
+                if (command.waitForCompletion || command.name == "wait")
+                {
+                    CoroutineWrapper cw = CommandManager.instance.Execute(command.name, command.arguments);
+                    while(!cw.isDone)
+                    {
+                        if(userPrompt)
+                        {
+                            CommandManager.instance.StopCurrentProcess();
+                            userPrompt = false;
+                        }
+                        yield return null;
+                    }
+                }
                 else
                     CommandManager.instance.Execute(command.name, command.arguments);
             }

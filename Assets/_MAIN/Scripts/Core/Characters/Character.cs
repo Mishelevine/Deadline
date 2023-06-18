@@ -8,7 +8,7 @@ namespace CHARACTERS
 {
     public abstract class Character
     {
-        public const bool ENABLE_ON_START = true;
+        public const bool ENABLE_ON_START = false;
         private const float UNHIGHLIGHTED_DARKEN_STRENGH = 0.65f;
         public const bool DEFAULT_ORIENTATION_IS_FACING_LEFT = false;
         public const string ANIMATION_REFRESH_TRIGGER = "Refresh";
@@ -198,7 +198,7 @@ namespace CHARACTERS
             yield return null;
         }
 
-        public Coroutine Highlight(float speed = 1f)
+        public Coroutine Highlight(float speed = 1f, bool immediate = false)
         {
             if (isHighlighting)
                 return co_highlighting;
@@ -207,12 +207,12 @@ namespace CHARACTERS
                 characterManager.StopCoroutine(co_highlighting);
 
             highlighted = true;
-            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed));
+            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed, immediate));
 
             return co_highlighting;
         }
 
-        public Coroutine UnHighlight(float speed = 1f)
+        public Coroutine UnHighlight(float speed = 1f, bool immediate = false)
         {
             if (isUnHighlighting)
                 return co_highlighting;
@@ -221,12 +221,12 @@ namespace CHARACTERS
                 characterManager.StopCoroutine(co_highlighting);
 
             highlighted = false;
-            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed));
+            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed, immediate));
 
             return co_highlighting;
         }
 
-        public virtual IEnumerator Highlighting(bool highlight, float speedMultiplier)
+        public virtual IEnumerator Highlighting(bool highlight, float speedMultiplier, bool immediate = false)
         {
             Debug.Log("Highliting is not available on this type of character!");
             yield return null;
@@ -285,6 +285,11 @@ namespace CHARACTERS
         {
             animator.SetBool(animation, state);
             animator.SetTrigger(ANIMATION_REFRESH_TRIGGER);
+        }
+
+        public virtual void OnRecieveCastingExpression(string expression)
+        {
+            return;
         }
 
         public enum CharacterType

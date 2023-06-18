@@ -5,6 +5,7 @@ using UnityEngine;
 using DIALOGUE;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.ShaderKeywordFilter;
 
 namespace CHARACTERS
 {
@@ -40,6 +41,8 @@ namespace CHARACTERS
             return config.GetConfig(characterName);
         }
 
+        public bool HasCharacter(string characterName) => characters.ContainsKey(characterName.ToLower());
+
         public Character GetCharacter(string characterName, bool createIfDoesNotExist = false)
         {
             if (characters.ContainsKey(characterName.ToLower()))
@@ -50,7 +53,7 @@ namespace CHARACTERS
             return null;
         }
 
-        public Character CreateCharacter(string characterName)
+        public Character CreateCharacter(string characterName, bool revealAfterCreation = false)
         {
             if (characters.ContainsKey(characterName.ToLower()))
             {
@@ -63,6 +66,9 @@ namespace CHARACTERS
             Character character = CreateCharacterFromInfo(info);
 
             characters.Add(info.name.ToLower(), character);
+
+            if(revealAfterCreation)
+                character.Show();
 
             return character;
         }

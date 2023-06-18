@@ -23,7 +23,7 @@ public class TestCharacters : MonoBehaviour
 
     IEnumerator Test()
     {
-        Character_Sprite Mifim = CreateCharacter("Mifim") as Character_Sprite;
+        Character_Sprite Mifim = CreateCharacter("Миша Ефимов") as Character_Sprite;
 
         yield return new WaitForSeconds(1);
 

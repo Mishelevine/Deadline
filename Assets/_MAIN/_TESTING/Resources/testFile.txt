@@ -1,3 +1,21 @@
-Плаксин "(я думаю)"
-Плпаксин "command(кто?)"
-Плаксин as Ксюша "Привет" print()
+CreateCharacter(Михаил Александрович -enable true), CreateCharacter(Миша Ефимов -e true)
+
+[wait]MoveCharacter(Михаил Александрович -x 0 -speed 0.1 -s false -i false)
+
+[wait]Михаил Александрович.Hide(), [wait]Михаил Александрович.Show()
+
+[wait]Михаил Александрович.Move(-x 1)
+
+[wait]Михаил Александрович.Highlight(-i true)
+
+Михаил Александрович.SetSprite(-s sad)
+
+wait(3)
+
+[wait]Михаил Александрович.Unhighlight()
+
+[wait]Михаил Александрович.Highlight(-i true)
+
+wait(3)
+
+Михаил Александрович.SetColor(-c red)
