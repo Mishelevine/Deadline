@@ -81,7 +81,7 @@ namespace CHARACTERS
         public virtual Coroutine Show()
         {
             if (isRevealing)
-                return co_revealing;
+                characterManager.StopCoroutine(co_revealing);
 
             if (isHiding)
                 characterManager.StopCoroutine(co_hiding);
@@ -95,7 +95,7 @@ namespace CHARACTERS
         public virtual Coroutine Hide()
         {
             if(isHiding)
-                return co_hiding;
+                characterManager.StopCoroutine(co_hiding);
 
             if (isRevealing)
                 characterManager.StopCoroutine(co_revealing);
@@ -200,10 +200,7 @@ namespace CHARACTERS
 
         public Coroutine Highlight(float speed = 1f, bool immediate = false)
         {
-            if (isHighlighting)
-                return co_highlighting;
-
-            if (isUnHighlighting)
+            if (isHighlighting || isUnHighlighting)
                 characterManager.StopCoroutine(co_highlighting);
 
             highlighted = true;
@@ -214,10 +211,7 @@ namespace CHARACTERS
 
         public Coroutine UnHighlight(float speed = 1f, bool immediate = false)
         {
-            if (isUnHighlighting)
-                return co_highlighting;
-
-            if (isHighlighting)
+            if (isHighlighting || isUnHighlighting)
                 characterManager.StopCoroutine(co_highlighting);
 
             highlighted = false;

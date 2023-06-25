@@ -15,18 +15,20 @@ namespace COMMANDS
         private static string[] PARAM_SPEED => new string[] { "-spd", "-speed" };
         private static string[] PARAM_SMOOTH => new string[] { "-sm", "-smooth" };
 
+        private static string[] PARAM_ROTATE => new string[] { "-r", "-rotate" };
+
         new public static void Extend(CommandDatabase database)
         {
             database.AddCommand("createcharacter", new Action<string[]>(CreateCharacter));
-            database.AddCommand("show", new Func<string[], IEnumerator>(ShowAll));
-            database.AddCommand("hide", new Func<string[], IEnumerator>(HideAll));
+            database.AddCommand("show", new Func<string[], IEnumerator>(Show));
+            database.AddCommand("hide", new Func<string[], IEnumerator>(Hide));
             database.AddCommand("movecharacter", new Func<string[], IEnumerator>(MoveCharacter));
             database.AddCommand("sort", new Action<string[]>(Sort));
 
             CommandDatabase baseCommands = CommandManager.instance.CreateSubDatabase(CommandManager.DATABASE_CHARACTERS_BASE);
             baseCommands.AddCommand("move", new Func<string[], IEnumerator>(MoveCharacter));
-            baseCommands.AddCommand("show", new Func<string[], IEnumerator>(ShowAll));
-            baseCommands.AddCommand("hide", new Func<string[], IEnumerator>(HideAll));
+            baseCommands.AddCommand("show", new Func<string[], IEnumerator>(Show));
+            baseCommands.AddCommand("hide", new Func<string[], IEnumerator>(Hide));
             baseCommands.AddCommand("setpriority", new Action<string[]>(SetPriority));
             baseCommands.AddCommand("setposition", new Action<string[]>(SetPosition));
             baseCommands.AddCommand("setColor", new Func<string[], IEnumerator>(SetColor));
@@ -64,6 +66,7 @@ namespace COMMANDS
             float speed = 1;
             bool smooth = false;
             bool immediate = false;
+            bool rotate = false;
 
             var parameters = ConvertDataToParameters(data);
 
@@ -72,6 +75,8 @@ namespace COMMANDS
             parameters.TryGetValue(PARAM_SPEED, out speed, defaultValue: 1);
 
             parameters.TryGetValue(PARAM_SMOOTH, out smooth, defaultValue: false);
+
+            parameters.TryGetValue(PARAM_ROTATE, out rotate, defaultValue: false);
 
             parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);
 
@@ -87,6 +92,9 @@ namespace COMMANDS
 
             Vector2 position = new(x, 0);
 
+            if (rotate)
+                character.FaceLeft();
+
             if (immediate)
                 character.SetPosition(position);
             else
@@ -96,7 +104,7 @@ namespace COMMANDS
             }
         }
 
-        public static IEnumerator ShowAll(string[] data)
+        public static IEnumerator Show(string[] data)
         {
             List<Character> characters = new List<Character>();
 
@@ -137,7 +145,7 @@ namespace COMMANDS
             }
         }
 
-        public static IEnumerator HideAll(string[] data)
+        public static IEnumerator Hide(string[] data)
         {
             List<Character> characters = new List<Character>();
 

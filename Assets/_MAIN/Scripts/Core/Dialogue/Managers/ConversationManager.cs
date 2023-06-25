@@ -14,7 +14,7 @@ namespace DIALOGUE
 
         private bool userPrompt = false;
 
-        private TextArchitect architect = null;
+        public TextArchitect architect = null;
 
         public ConversationManager(TextArchitect architect)
         {
@@ -141,6 +141,7 @@ namespace DIALOGUE
             }
         }
 
+        public bool isWaitingForAutoReader { get; private set; } = false;
         IEnumerator WaitForDialogueSegmentSignalToBeTriggered(DL_DIALOGUE_DATA.DIALOGUE_SEGMENT segment)
         {
             switch(segment.startSignal)
@@ -151,7 +152,9 @@ namespace DIALOGUE
                     break;
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WC:
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WA:
+                    isWaitingForAutoReader = true;
                     yield return new WaitForSeconds(segment.signalDelay);
+                    isWaitingForAutoReader = false;
                     break;
                 default:
                     break;

@@ -31,3 +31,5 @@ public class GraphicLayerTesting : MonoBehaviour
         Debug.Log(layer.currentGraphic);
     }
 }
+
+

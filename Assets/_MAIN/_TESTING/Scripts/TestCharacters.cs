@@ -14,10 +14,10 @@ public class TestCharacters : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Character Mifim = CharacterManager.instance.CreateCharacter("Mifim");
-        //Character Mifim2 = CharacterManager.instance.CreateCharacter("Mifim");
-        //Character Me = CharacterManager.instance.CreateCharacter("Me");
-        //Character Hui = CharacterManager.instance.CreateCharacter("Hui");
+        Character Mifim = CharacterManager.instance.CreateCharacter("Mifim");
+        Character Mifim2 = CharacterManager.instance.CreateCharacter("Mifim");
+        Character Me = CharacterManager.instance.CreateCharacter("Me");
+        Character Hui = CharacterManager.instance.CreateCharacter("Hui");
         StartCoroutine(Test());
     }
 
@@ -37,40 +37,40 @@ public class TestCharacters : MonoBehaviour
 
         Mifim.Animate("Shiver", false);
 
-        //yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);
 
-        //yield return Mifim.UnHighlight();
+        yield return Mifim.UnHighlight();
 
-        //yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1);
 
-        //yield return Mifim.TransitionColor(Color.red);
+        yield return Mifim.TransitionColor(Color.red);
 
-        //yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1);
 
-        //yield return Mifim.Highlight();
+        yield return Mifim.Highlight();
 
-        //yield return Mifim.TransitionColor(Color.white);
+        yield return Mifim.TransitionColor(Color.white);
 
-        //Character Hui = CreateCharacter("Hui as Mifim");
+        Character Kui = CreateCharacter("Kui as Mifim");
 
-        //Mifim.SetPosition(Vector2.zero);
-        //Hui.SetPosition(new(0.5f,0f));
+        Mifim.SetPosition(Vector2.zero);
+        Kui.SetPosition(new(0.5f, 0f));
 
-        //Mifim.Show();
-        //Hui.Show();
+        Mifim.Show();
+        Kui.Show();
 
-        //yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);
 
-        //Sprite MifimFun = Mifim.GetSprite("fun");
+        Sprite MifimFun = Mifim.GetSprite("fun");
 
-        //Mifim.TransitionSprite(MifimFun);
+        Mifim.TransitionSprite(MifimFun);
 
-        //yield return Mifim.MoveToPosition(new(1, 0), smooth: true);
-        //Mifim.MoveToPosition(new(0, 0), smooth: true);
+        yield return Mifim.MoveToPosition(new(1, 0), smooth: true);
+        Mifim.MoveToPosition(new(0, 0), smooth: true);
 
-        //Sprite MifimSad = Mifim.GetSprite("sad");
+        Sprite MifimSad = Mifim.GetSprite("sad");
 
-        //Mifim.TransitionSprite(MifimSad);
+        Mifim.TransitionSprite(MifimSad);
 
         yield return null;
     }

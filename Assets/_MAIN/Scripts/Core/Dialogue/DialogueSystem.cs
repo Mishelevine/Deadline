@@ -13,7 +13,7 @@ namespace DIALOGUE
         public DialogueContainer dialogueContainer = new DialogueContainer();
 
         private ConversationManager conversationManager;
-
+        private AutoReader autoReader;
         private TextArchitect architect;
 
         public static DialogueSystem instance { get; private set; }
@@ -44,9 +44,20 @@ namespace DIALOGUE
 
             architect = new TextArchitect(dialogueContainer.dialogueText);
             conversationManager = new ConversationManager(architect);
+
+            if (TryGetComponent(out autoReader))
+                autoReader.Initialize(conversationManager);
         }
 
         public void OnUserPrompt_Next()
+        {
+            onUserPrompt_Next?.Invoke();
+
+            if (autoReader != null && autoReader.isOn)
+                autoReader.Disable();
+        }
+
+        public void OnUserSystem_Next()
         {
             onUserPrompt_Next?.Invoke();
         }

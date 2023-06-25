@@ -188,6 +188,9 @@ public class GraphicObject
         if (layer.currentGraphic != null && layer.currentGraphic.renderer == renderer)
             layer.currentGraphic = null;
 
+        if (layer.oldGrathics.Contains(this))
+            layer.oldGrathics.Remove(this);
+
         Object.Destroy(renderer.gameObject);
     }
 
