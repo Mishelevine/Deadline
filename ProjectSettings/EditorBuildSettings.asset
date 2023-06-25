@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_MAIN/Scenes/VisualNovel.unity
     guid: 42977dd58a043b74db48c7bc8612e8de
+  - enabled: 0
+    path: Assets/Test.unity
+    guid: 3f9e1eba5931fe5468ce2c6f21b109ac
   m_configObjects: {}
